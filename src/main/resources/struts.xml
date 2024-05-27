@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2. 5.dtd">
+
+<struts>
+
+	<!--<constant name="struts.devMode" value="true" /> -->
+	<constant name="struts.enable.DynamicMethodInvocation"
+		value="true" />
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.multipart.maxSize" value="1000000" />
+	<constant name="struts.multipart.maxFileSize" value="750000" />
+	<constant name="struts.ognl.allowStaticMethodAccess"
+		value="true" />
+	<constant name="struts.ognl.logMissingProperties" value="true" />
+	<package name="basicstruts2" extends="struts-default">
+		<interceptors>
+			<interceptor name="CheckLogin"
+				class="com.fpt.ojtstem.action.CheckLogin" />
+			<interceptor-stack name="loginStack">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="CheckLogin" />
+			</interceptor-stack>
+		</interceptors>
+
+		<action name="index"
+			class="com.fpt.ojtstem.action.BookingTicketAction" method="init">
+			<result name="success">/index.jsp</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		
+		<action name="booking"
+			class="com.fpt.ojtstem.action.pageAction" method="booking">
+			<result name="success">/booking.jsp</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		
+		<action name="inforAcc"
+			class="com.fpt.ojtstem.action.pageAction" method="init">
+			<result name="success">/InforAcc.jsp</result>
+		
+		</action>
+		<action name="dateAction" class="com.fpt.ojtstem.action.pageAction"
+			method="selectRoom">
+			<result name="success">/booking.jsp</result>
+			<result name="error">/booking.jsp</result>
+		</action>
+		<action name="selectedTicketTypeAction" class="com.fpt.ojtstem.action.pageAction"
+			method="showMoney">
+			<result name="success">/SelectType.jsp</result>
+			<result name="error">/SelectType.jsp</result>
+		</action>
+		<action name="roomAction" class="com.fpt.ojtstem.action.pageAction"
+			method="selectShowtime">
+			<result name="success">/booking.jsp</result>
+			<result name="error">/booking.jsp</result>
+		</action>
+		<action name="Seat"
+			class="com.fpt.ojtstem.action.pageAction" method="showSeat">
+			<result name="success">/booking.jsp</result>
+			<result name="error">/booking.jsp</result>
+		</action>
+		<action name="Ticket"
+			class="com.fpt.ojtstem.action.pageAction"
+			method="confirmTicket">
+			<result name="success">/SelectType.jsp</result>
+	
+		</action>
+		<action name="buyTicket" class="com.fpt.ojtstem.action.pageAction"
+			method="buy">
+			<result name="success">/Ticket.jsp</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">detail</param>
+				<param name="parse">false</param>
+			</result>
+			
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="back" type="redirectAction">
+				<param name="actionName">Payment</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		<action name="detail" class="com.fpt.ojtstem.action.pageAction"
+			method="showMovie">
+			<result name="success">Moviedetail.jsp</result>
+		</action>
+		<action name="showInvoice" class="com.fpt.ojtstem.action.InvoiceAction">
+			<result name="success">/showInvoice.jsp</result>
+		</action>
+		
+		
+		<!-- Login && logout -->
+		<action name="login" class="com.fpt.ojtstem.action.LoginAction"
+			method="init">
+			<result name="success">/Login.jsp</result>
+		</action>
+		<action name="signup" class="com.fpt.ojtstem.action.SignUpAction"
+			method="init">
+			<result name="success">/SignUp.jsp</result>
+		</action>
+		<action name="signuppro" class="com.fpt.ojtstem.action.SignUpAction"
+			method="execute">
+			<result name="success">/page.jsp</result>
+			<result name="error">/SignUp.jsp</result>
+		</action>
+		<action name="loginprocess"
+			class="com.fpt.ojtstem.action.LoginAction">
+
+			<result name="admin" type="redirectAction">
+				<param name="actionName">DisplayMovie</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="employees" type="redirectAction">
+				<param name="actionName">index</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="user" type="redirectAction">
+				<param name="actionName">page</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		<action name="page" class="com.fpt.ojtstem.action.pageAction">
+			<result name="success">/page.jsp</result>
+
+		</action>
+
+		<action name="LogoutAction"
+			class="com.fpt.ojtstem.action.LogoutAction">
+			<result name="success" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+
+		<!-- Movie -->
+		<!-- Hiển thị -->
+		<action name="DisplayMovie"
+			class="com.fpt.ojtstem.action.ShowMovieAction">
+			<interceptor-ref name="loginStack" />
+			<result name="error" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="success">/ShowMovie.jsp</result>
+		</action>
+
+		<action name="AddMovie" class="com.fpt.ojtstem.action.ShowMovieAction"
+			method="getTypeName">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/AddMovie.jsp</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		<action name="UpdateImg"
+			class="com.fpt.ojtstem.action.AddMovieAction" method="updateFile">
+			<result name="success" type="chain">AddMovieAction</result>
+			<result name="error" type="chain">AddMovieAction</result>
+			<result name="input" type="chain">AddMovieAction</result>
+		</action>
+		<action name="AddMovieAction"
+			class="com.fpt.ojtstem.action.AddMovieAction" method="add">
+			<interceptor-ref name="loginStack" />
+			<result name="success" type="redirectAction">
+				<param name="actionName">DisplayMovie</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">AddMovie</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="input" type="redirectAction">
+				<param name="actionName">AddMovie</param>
+				<param name="parse">false</param>
+			</result>
+
+		</action>
+
+		<action name="DeleteMovie" class="com.fpt.ojtstem.action.AddMovieAction"
+			method="delete">
+			<interceptor-ref name="loginStack" />
+			<result name="success" type="redirectAction">
+				<param name="actionName">DisplayMovie</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">DisplayMovie</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		<action name="EditMovie" class="com.fpt.ojtstem.action.ShowMovieAction"
+			method="getMovieOne">
+			<interceptor-ref name="loginStack" />
+			<result name="success" type="chain">EditMovie1</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+		<action name="EditMovie1" class="com.fpt.ojtstem.action.ShowMovieAction"
+			method="getTypeName">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/EditMovie.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		<action name="EditMovieAction"
+			class="com.fpt.ojtstem.action.ShowMovieAction" method="update">
+			<!-- <result name="error" type="redirectAction"> <param
+			name="actionName">DisplayMovie</param> 
+				<param name="parse">false</param> </result> -->
+			<interceptor-ref name="loginStack" />
+			<result name="success" type="redirectAction">
+				<param name="actionName">DisplayMovie</param>
+			</result>
+
+		</action>
+		<action name="detailMovie"
+			class="com.fpt.ojtstem.action.ShowMovieAction" method="getTypeName">
+			<interceptor-ref name="loginStack" />
+			<result name="success" type="chain">Show</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		<action name="Show" class="com.fpt.ojtstem.action.ShowMovieAction"
+			method="getMovieOne">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/DetailMovie.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+
+		</action>
+		<action name="TypeMovie"
+			class="com.fpt.ojtstem.action.ShowTypeMovieAction">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/ShowType_Movie.jsp</result>
+			<result name="error">/login.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+
+		<!-- Add -->
+		<action name="AddTypeMovie">
+			<result>/AddTypeMovie.jsp</result>
+		</action>
+		<action name="AddTypeMovieAction"
+			class="com.fpt.ojtstem.action.AddTypeMovieAction">
+			<interceptor-ref name="loginStack" />
+			<result name="success" type="chain">TypeMovie</result>
+			<result name="error">/AddTypeMovie.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+		<!-- Edit -->
+		<action name="EditTypeMovie"
+			class="com.fpt.ojtstem.action.EditTypeMovieAction">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/EditTypeMovie.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+		<action name="Edit" class="com.fpt.ojtstem.action.EditTypeMovieAction"
+			method="updateTypeMovie">
+			<interceptor-ref name="loginStack" />
+			<result name="Update" type="chain">TypeMovie</result>
+			<result name="error">/EditTypeMovie.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		<!-- Delete -->
+		<action name="Delete" class="com.fpt.ojtstem.action.EditTypeMovieAction"
+			method="delete">
+			<interceptor-ref name="loginStack" />
+			<result name="delete" type="chain">TypeMovie</result>
+			<result name="error">/ShowType_Movie.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+
+		<!-- Room -->
+		<!-- Show Room -->
+		<action name="Room" class="com.fpt.ojtstem.action.ShowRoomAction">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/ShowRoom.jsp</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+
+		<!-- Add -->
+		<action name="AddRoom">
+			<result>/AddRoom.jsp</result>
+		</action>
+		<action name="AddRoomAction"
+			class="com.fpt.ojtstem.action.AddRoomAction">
+			<interceptor-ref name="loginStack" />
+			<result name="success" type="chain">Room</result>
+			<result name="error">/AddRoom.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+		<!-- EditRoom -->
+
+		<action name="EditRoom" class="com.fpt.ojtstem.action.EditRoomAction">
+			<result name="success">/EditRoom.jsp</result>
+		</action>
+
+		<action name="EditRoomAction"
+			class="com.fpt.ojtstem.action.EditRoomAction" method="update">
+			<interceptor-ref name="loginStack" />
+			<result name="update" type="chain">Room</result>
+			<result name="error">/EditRoom.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+		<!-- Delete -->
+		<action name="DeleteRoom" class="com.fpt.ojtstem.action.EditRoomAction"
+			method="delete">
+			<interceptor-ref name="loginStack" />
+			<result name="success" type="chain">Room</result>
+			<result name="error" type="chain">Room</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+
+		<!-- TypeTicket -->
+		<!--Show -->
+		<action name="TypeTicket"
+			class="com.fpt.ojtstem.action.ShowTypeTicketAction">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/ShowTypeTicket.jsp</result>
+			<result name="error">/login.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+		<!-- Add -->
+		<action name="AddTicket">
+			<result>/AddTypeTicket.jsp</result>
+		</action>
+
+		<action name="AddTypeTicketAction"
+			class="com.fpt.ojtstem.action.ShowTypeTicketAction" method="add">
+			<interceptor-ref name="loginStack" />
+			<result name="Add" type="chain">TypeTicket</result>
+			<result name="error">/AddTypeTicket.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+
+		<!-- Edit -->
+		<action name="EditTypeTicket"
+			class="com.fpt.ojtstem.action.EditTypeTicketAction">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/EditTypeTicket.jsp</result>
+		</action>
+		<action name="EditTypeTicketAction"
+			class="com.fpt.ojtstem.action.EditTypeTicketAction" method="update">
+			<interceptor-ref name="loginStack" />
+			<result name="update" type="chain">TypeTicket</result>
+			<result name="error">/EditTypeTicket.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+		<!-- Delete -->
+		<action name="DeleteTypeTicket"
+			class="com.fpt.ojtstem.action.EditTypeTicketAction" method="delete">
+			<interceptor-ref name="loginStack" />
+			<result name="delete" type="redirectAction">
+				<param name="actionName">TypeTicket</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="error">/ShowTypeTicket.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+		<!-- Upload file -->
+
+		<action name="BookingTicket"
+			class="com.fpt.ojtstem.action.BookingTicketAction">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/BookingTicket.jsp</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+		<action name="bookingTicketAction"
+			class="com.fpt.ojtstem.action.BookingTicketAction"
+			method="selectDate">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/BookingTicket.jsp</result>
+			<result name="error">/BookingTicket.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		<action name="bookingDateAction"
+			class="com.fpt.ojtstem.action.BookingTicketAction"
+			method="selectRoom">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/BookingTicket.jsp</result>
+			<result name="error">/BookingTicket.jsp</result>
+		</action>
+		<action name="selectedRoomAction"
+			class="com.fpt.ojtstem.action.BookingTicketAction"
+			method="selectShowtime">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/BookingTicket.jsp</result>
+			<result name="error">/BookingTicket.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		<action name="showSeat"
+			class="com.fpt.ojtstem.action.BookingTicketAction" method="showSeat">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/BookingTicket.jsp</result>
+			<result name="error">/BookingTicket.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		<action name="ConfirmTicket"
+			class="com.fpt.ojtstem.action.BookingTicketAction"
+			method="confirmTicket">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/ConfirmTicket.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		<action name="Payment"
+			class="com.fpt.ojtstem.action.BookingTicketAction" method="Payment">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/Payment.jsp</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+
+		<action name="buy" class="com.fpt.ojtstem.action.BookingTicketAction"
+			method="buy">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/DisplayTicket.jsp</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">BookingTicket</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="back" type="redirectAction">
+				<param name="actionName">Payment</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		<action name="statistic" class="com.fpt.ojtstem.action.StatisticAction">
+			<result name="success">/Statistic.jsp</result>
+		</action>
+		<action name="selectedCriteriaAction"
+			class="com.fpt.ojtstem.action.StatisticAction"
+			method="selectedCriteria">
+			<result name="success">/Statistic.jsp</result>
+		</action>
+		<action name="selectedTimeAction"
+			class="com.fpt.ojtstem.action.StatisticAction" method="selectedTime">
+			<result name="success">/Statistic.jsp</result>
+		</action>
+		<action name="selectedTop3Action"
+			class="com.fpt.ojtstem.action.StatisticAction" method="selectedTop3">
+			<result name="success">/Statistic.jsp</result>
+		</action>
+		
+			<action name="AddSche" class="com.fpt.ojtstem.action.ShowMovieAction"
+			method="getTypeName">
+			<interceptor-ref name="loginStack" />
+			<result name="success">/AddMovie.jsp</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+		</action>
+		<action name="UpdateImg"
+			class="com.fpt.ojtstem.action.AddMovieAction" method="updateFile">
+			<result name="success" type="chain">AddMovieAction</result>
+			<result name="error" type="chain">AddMovieAction</result>
+			<result name="input" type="chain">AddMovieAction</result>
+		</action>
+		<action name="AddMovieAction"
+			class="com.fpt.ojtstem.action.AddMovieAction" method="add">
+			<interceptor-ref name="loginStack" />
+			<result name="success" type="redirectAction">
+				<param name="actionName">DisplayMovie</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">AddMovie</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="login" type="redirectAction">
+				<param name="actionName">login</param>
+				<param name="parse">false</param>
+			</result>
+			<result name="input" type="redirectAction">
+				<param name="actionName">AddMovie</param>
+				<param name="parse">false</param>
+			</result>
+
+		</action>
+
+	</package>
+</struts>
